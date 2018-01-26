@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2016, Embedded Adventures
+Copyright (c) 2018, Embedded Adventures
 All rights reserved.
 Contact us at source [at] embeddedadventures.com
 www.embeddedadventures.com
@@ -30,6 +30,14 @@ THE POSSIBILITY OF SUCH DAMAGE.
 // ZDU0110RFX UART Interface IC Arduino test sketch
 // Written originally by Embedded Adventures
 
+/*
+ * This demo sketch requires the use of another device to act as a UART receiver.
+ * The Arduino sends the "welcome" message via I2C to the MOD-1025, which then sends 
+ * it to the UART receiver. 
+ * REMEMBER - the TX pin of the MOD-1025 must be connected to the TX pin of the 
+ * receiver. The same goes for the RX line.
+ */
+
 
 #include <Wire.h>
 #include <ZDU0110RFX.h>
@@ -37,7 +45,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
 
 ZDUSerial zdu;
-const int irqPin = 2;
+const int irqPin = 2; //An interrupt pin is required for utilizing the MOD-1025
 
 void setup() {
   Wire.begin();
@@ -48,6 +56,7 @@ void setup() {
 }
 
 void loop() {
+  //This loop echoes any input from the other UART device.
   if (zdu.available()) {
     char input = zdu.read();
     zdu.print("Hello");
